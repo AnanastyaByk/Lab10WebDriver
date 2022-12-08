@@ -15,7 +15,7 @@ import java.util.List;
 public class ProductPage {
     WebDriver webDriver;
 
-    @FindBy(className = "x-product-card-description__product-name")
+    @FindBy(className = "ui-catalog-search-head-title")
     WebElement productName;
 
     public ProductPage(WebDriver webDriver) {

@@ -22,7 +22,7 @@ public class FindProductByFullNameTest {
 
     @Test
     public void testFindProductByName(){
-        String inputLine = "Шарф LUHTA NAANJOKI";
+        String inputLine = "adidas by Stella McCartney";
         HomePage homePage = new HomePage(driver);
         ProductPage productPage = new ProductPage(driver);
 

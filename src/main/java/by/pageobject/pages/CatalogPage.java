@@ -1,5 +1,6 @@
 package by.pageobject.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -17,8 +18,7 @@ public class CatalogPage {
     @FindBy(className = "v-popper-target")
     List<WebElement> sortButtons;
 
-    @FindBy(className = "input__input")
-    WebElement inputMinPrice;
+
 
     @FindBy(xpath = "/html/body/div[1]/div/main/div/div[2]/div[2]/div[1]/div/div/div/div[14]/div[2]/div[1]/div/div/div/div[2]/button")
     WebElement submitButton;
@@ -40,6 +40,7 @@ public class CatalogPage {
     }
 
     public CatalogPage sendKeys(String keys){
+        WebElement inputMinPrice = webDriver.findElement(By.className("input__input"));
         inputMinPrice.sendKeys(keys);
         return this;
     }
@@ -65,6 +66,7 @@ public class CatalogPage {
     }
 
     public WebElement getInputMinPrice() {
+        WebElement inputMinPrice = webDriver.findElement(By.className("input__input"));
         return inputMinPrice;
     }
 }
