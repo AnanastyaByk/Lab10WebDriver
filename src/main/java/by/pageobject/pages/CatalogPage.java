@@ -1,76 +1,63 @@
 package by.pageobject.pages;
 
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 import java.util.List;
 
-public class CatalogPage {
-    WebDriver webDriver;
+public class CatalogPage extends AbstractPage{
+    public static final String CATALOG_PAGE_URL = "https://dihome.by/catalog/vannaya/aromaty/aromaticheskie-svechi/";
 
-    @FindBy(className = "v-popper-target")
-    List<WebElement> sortButtons;
+    @FindBy(className = "catalog-smart-filter-item")
+    List<WebElement> filterBlock;
 
-    @FindBy(xpath = "/html/body/div[1]/div/main/div/div[2]/div[2]/div[1]/div/div/div/div[14]/div[2]/div[1]/div/div/div/div[2]/button")
-    WebElement submitButton;
+    @FindBy(xpath = "//*[@id=\"i-19-bitrix-catalog-smart-filter-vertical-2-KZ7kpsh6etqY\"]/div/div[2]/div/form/div[1]/div[3]/div[3]/div/div/div[4]/label")
+    WebElement chosenCollection;
 
-    @FindBy(name = "minRange")
-    WebElement inputMinPrice;
+    @FindBy(id = "bx_3966226736_i-22-bitrix-catalog-section-catalog-tile-2-OQ3k9PHlVICg_10130")
+    WebElement elementFilteredByCollection;
 
-    public CatalogPage(WebDriver webDriver) {
-        this.webDriver = webDriver;
-        PageFactory.initElements(webDriver, this);
+    @FindBy(className = "catalog-smart-filter-popup-link")
+    WebElement submitFiltration;
+
+    @FindBy(className = "catalog-section-item-base")
+    WebElement firstProductInCatalog;
+
+    public CatalogPage(WebDriver driver) {
+        super(driver);
     }
 
-    public CatalogPage clickPriceSortButton() {
-        for (var i : sortButtons) {
-            if (i.getText().equals("Цена")) {
-                Actions actions = new Actions(webDriver);
-                actions.moveToElement(i).click().build().perform();
-                break;
-            }
-        }
+    @Override
+    public CatalogPage openPage() {
+        driver.get(CATALOG_PAGE_URL);
         return this;
     }
 
-    public CatalogPage sendKeys(String keys) {
-        new WebDriverWait(webDriver, Duration.ofMillis(5000)).until(ExpectedConditions.visibilityOf(inputMinPrice));
-        inputMinPrice.sendKeys(keys);
+    public CatalogPage clickOnCollection() {
+        wait.until(ExpectedConditions.elementToBeClickable(chosenCollection));
+        chosenCollection.click();
         return this;
     }
 
-    public CatalogPage submit() {
-        submitButton.click();
+    public CatalogPage getNeededFiltration(int i) {
+        filterBlock.get(i).click();
         return this;
     }
 
-    public int currentUrl() {
-        String url = webDriver.getCurrentUrl().replaceAll("\\D", "").substring(2, 6);
-        return Integer.parseInt(url);
+    public void submitFiltration() {
+        wait.until(ExpectedConditions.elementToBeClickable(submitFiltration)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(elementFilteredByCollection));
     }
 
-    public CatalogPage pause(WebElement webElement) {
-        new WebDriverWait(webDriver, Duration.ofMillis(5000)).until(ExpectedConditions.elementToBeClickable(webElement));
-        return this;
+    public String getCurrentCollection() {
+        return driver.getCurrentUrl();
     }
 
-    public CatalogPage visibility(WebElement webElement) {
-        new WebDriverWait(webDriver, Duration.ofMillis(5000)).until(ExpectedConditions.visibilityOf(webElement));
-        return this;
+    public String getNameOfFirstProduct() {
+        return showFirstProductTitle().getText();
     }
 
-    public WebElement getSortButtons() {
-        return sortButtons.stream().findFirst().orElseThrow(() -> new RuntimeException("lol"));
-    }
-
-    public WebElement getInputMinPrice() {
-        return inputMinPrice;
+    private WebElement showFirstProductTitle() {
+        return firstProductInCatalog.findElement(By.className("catalog-section-item-name"));
     }
 }
