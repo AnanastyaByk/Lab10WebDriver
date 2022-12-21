@@ -14,6 +14,7 @@ public class FilterByPriceTest {
     @BeforeTest
     public void initWebDriver(){
         WebDriverManager.chromedriver().setup();
+        driver.manage().window().maximize();
         driver.get("https://www.lamoda.by/c/15/shoes-women/");
     }
 
@@ -28,11 +29,10 @@ public class FilterByPriceTest {
         javascriptExecutor.executeScript("window.scrollBy(0,500)");
         catalogPage.pause(catalogPage.getSortButtons())
                 .clickPriceSortButton()
-                .pause(catalogPage.getInputMinPrice())
                 .sendKeys(minPrice)
                 .submit();
         Thread.sleep(2000);
-        int res = catalogPage.check();
+        int res = catalogPage.currentUrl();
         Assert.assertEquals(res, lol);
     }
 
